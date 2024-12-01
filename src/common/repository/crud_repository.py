@@ -31,6 +31,12 @@ class CrudRepository(Generic[T]):
         await self._commit_or_flush(model_obj, with_commit)
         return model_obj
 
+    async def create_many(
+        self, objs: list[dict[str, Any]], with_commit: bool = True
+    ) -> None:
+        objs = [await self.create(obj, False) for obj in objs]
+        await self._commit_or_flush(None, with_commit)
+
     async def update(
         self,
         obj: T,

@@ -4,6 +4,7 @@ from common.dao.deps import PgSession
 from common.repository import CrudRepository
 from insurance.models import InsuranceRate
 from insurance.schemas.insurance_rate import (
+    ImportRatesSchema,
     InsuranceRateSchema,
     InsuranceRateCreateSchema,
     InsuranceRateUpdateSchema,
@@ -43,3 +44,11 @@ class InsuranceRateService:
         if obj is None:
             raise NotFoundException
         await self._repository.delete(obj)
+
+    async def import_rates(self, rates: ImportRatesSchema) -> None:
+        await self._repository.create_many(
+            [
+                dict(transportation_date=date, **rates.rates[date].model_dump())
+                for date in rates.rates
+            ]
+        )

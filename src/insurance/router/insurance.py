@@ -5,6 +5,7 @@ from insurance.schemas.insurance_rate import (
     InsuranceRateSchema,
     InsuranceRateCreateSchema,
     InsuranceRateUpdateSchema,
+    ImportRatesSchema,
 )
 from insurance.services import deps
 
@@ -26,6 +27,9 @@ class InsuranceRouter(BaseRouter):
         )
         self.router.add_api_route(
             "/delete", self.remove_insurance, methods=[HttpMethod.DELETE]
+        )
+        self.router.add_api_route(
+            "/import", self.import_insurances, methods=[HttpMethod.POST]
         )
 
     async def get_insurances(
@@ -55,4 +59,10 @@ class InsuranceRouter(BaseRouter):
         self, service: deps.InsuranceRateServiceDep, sid: UUID
     ) -> Msg:
         await service.remove(sid)
+        return Msg(msg="Ok")
+
+    async def import_insurances(
+        self, service: deps.InsuranceRateServiceDep, rates: ImportRatesSchema
+    ) -> Msg:
+        await service.import_rates(rates)
         return Msg(msg="Ok")

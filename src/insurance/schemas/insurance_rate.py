@@ -23,3 +23,12 @@ class InsuranceRateUpdateSchema(AbstractSchema):
     cargo_type: Optional[str]
     rate: Optional[float]
     transportation_date: Optional[date]
+
+
+class InsuranceRateImportSchema(AbstractSchema):
+    cargo_type: Optional[str]
+    rate: Optional[float]
+
+
+class ImportRatesSchema(AbstractSchema):
+    rates: dict[date, InsuranceRateImportSchema]
