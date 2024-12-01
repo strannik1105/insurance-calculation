@@ -1,3 +1,4 @@
+from uuid import UUID
 from common.router.router import BaseRouter, HttpMethod
 from insurance.schemas.insurance_rate import (
     InsuranceRateCreateSchema,
@@ -14,16 +15,22 @@ class InsuranceRouter(BaseRouter):
         self.router.add_api_route(
             "/get_all", self.get_insurances, methods=[HttpMethod.GET]
         )
+        self.router.add_api_route("/get", self.get_insurance, methods=[HttpMethod.GET])
         self.router.add_api_route(
             "/create", self.create_insurance, methods=[HttpMethod.POST]
         )
 
     async def get_insurances(
         self, service: deps.InsuranceRateServiceDep, limit: int = 50, offset=0
-    ):
-        return await service.get_all_insurances(limit, offset)
+    ) -> list[InsuranceRateSchema]:
+        return await service.get_all(limit, offset)
+
+    async def get_insurance(
+        self, service: deps.InsuranceRateServiceDep, sid: UUID
+    ) -> InsuranceRateSchema:
+        return await service.get_one(sid)
 
     async def create_insurance(
         self, service: deps.InsuranceRateServiceDep, rate: InsuranceRateCreateSchema
     ) -> InsuranceRateSchema:
-        return await service.create_insurance(rate)
+        return await service.create(rate)

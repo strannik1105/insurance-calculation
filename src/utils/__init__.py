@@ -1,3 +1,3 @@
-from .utils import Singleton, UrlMaker
+from .utils import Singleton, UrlMaker, NotFoundException
 
-__all__ = ["Singleton", "UrlMaker"]
+__all__ = ["Singleton", "UrlMaker", "NotFoundException"]
