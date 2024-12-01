@@ -12,10 +12,18 @@ class InsuranceRouter(BaseRouter):
 
     def register_handlers(self) -> None:
         self.router.add_api_route(
-            "/create", self.create_insurances, methods=[HttpMethod.POST]
+            "/get_all", self.get_insurances, methods=[HttpMethod.GET]
+        )
+        self.router.add_api_route(
+            "/create", self.create_insurance, methods=[HttpMethod.POST]
         )
 
-    async def create_insurances(
+    async def get_insurances(
+        self, service: deps.InsuranceRateServiceDep, limit: int = 50, offset=0
+    ):
+        return await service.get_all_insurances(limit, offset)
+
+    async def create_insurance(
         self, service: deps.InsuranceRateServiceDep, rate: InsuranceRateCreateSchema
     ) -> InsuranceRateSchema:
         return await service.create_insurance(rate)
