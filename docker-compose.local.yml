@@ -1,7 +1,5 @@
 volumes:
   postgres-data:
-  redis-data:
-  clickhouse-data:
 
 
 services:
@@ -11,6 +9,6 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     restart: always
-    env_file: .env
+    env_file: .env.local
     ports:
-      - "15432:5432"
+      - "5432:5432"

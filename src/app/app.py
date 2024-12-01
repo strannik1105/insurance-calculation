@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
 from common.config import AppConfig
-from common.router.router import BaseRouter
+from common.router import BaseRouter
 from utils import Singleton
 
 

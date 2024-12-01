@@ -1,5 +1,6 @@
 from datetime import date
 from uuid import UUID
+
 from common.schema import AbstractSchema
 
 
@@ -13,5 +14,5 @@ class InsuranceRateSchema(InsuranceRateBaseSchema):
     sid: UUID
 
 
-class InsuranceRateCreateSchema(InsuranceRateSchema):
+class InsuranceRateCreateSchema(InsuranceRateBaseSchema):
     pass

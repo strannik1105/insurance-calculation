@@ -15,6 +15,6 @@ class AppConfig(AbstractConfig, Singleton[AbstractConfig]):
 class PostgresConfig(AbstractConfig, Singleton[AbstractConfig]):
     POSTGRES_USER: str = "insurance_user"
     POSTGRES_PASSWORD: str = "password"
-    POSTGRES_DB: str = "unsurance"
-    POSTGRES_HOST: str = "postgres"
+    POSTGRES_DB: str = "insurance"
+    POSTGRES_HOST: str = "0.0.0.0"
     POSTGRES_PORT: int = 5432
