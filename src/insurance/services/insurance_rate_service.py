@@ -37,3 +37,9 @@ class InsuranceRateService:
     async def create(self, rate: InsuranceRateCreateSchema) -> InsuranceRateSchema:
         obj = await self._repository.create(rate.model_dump())
         return InsuranceRateSchema.model_validate(obj)
+
+    async def remove(self, sid: UUID) -> None:
+        obj = await self._repository.get(sid)
+        if obj is None:
+            raise NotFoundException
+        await self._repository.delete(obj)

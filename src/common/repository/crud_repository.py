@@ -1,4 +1,4 @@
-from typing import Generic, Type, TypeVar, Any
+from typing import Generic, Optional, Type, TypeVar, Any
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from uuid import UUID
@@ -45,11 +45,12 @@ class CrudRepository(Generic[T]):
 
     async def delete(self, obj, with_commit: bool = True):
         await self._session.delete(obj)
+        await self._commit_or_flush(None, with_commit)
 
-    async def _commit_or_flush(self, obj: T, with_commit: bool):
+    async def _commit_or_flush(self, obj: Optional[T], with_commit: bool):
         if with_commit:
             await self._session.commit()
         else:
             await self._session.flush()
-
-        await self._session.refresh(obj)
+        if obj is not None:
+            await self._session.refresh(obj)

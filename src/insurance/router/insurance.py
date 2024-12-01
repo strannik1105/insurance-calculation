@@ -1,5 +1,6 @@
 from uuid import UUID
 from common.router.router import BaseRouter, HttpMethod
+from common.schema import Msg
 from insurance.schemas.insurance_rate import (
     InsuranceRateSchema,
     InsuranceRateCreateSchema,
@@ -22,6 +23,9 @@ class InsuranceRouter(BaseRouter):
         )
         self.router.add_api_route(
             "/create", self.create_insurance, methods=[HttpMethod.POST]
+        )
+        self.router.add_api_route(
+            "/delete", self.remove_insurance, methods=[HttpMethod.DELETE]
         )
 
     async def get_insurances(
@@ -46,3 +50,9 @@ class InsuranceRouter(BaseRouter):
         self, service: deps.InsuranceRateServiceDep, rate: InsuranceRateCreateSchema
     ) -> InsuranceRateSchema:
         return await service.create(rate)
+
+    async def remove_insurance(
+        self, service: deps.InsuranceRateServiceDep, sid: UUID
+    ) -> Msg:
+        await service.remove(sid)
+        return Msg(msg="Ok")
