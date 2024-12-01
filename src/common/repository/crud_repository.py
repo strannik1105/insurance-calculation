@@ -35,11 +35,10 @@ class CrudRepository(Generic[T]):
         self,
         obj: T,
         changes: dict[str, Any],
-        sid: UUID,
         with_commit: bool = True,
     ):
         await self._session.execute(
-            update(self._model).where(self._model.sid == sid).values(changes)
+            update(self._model).where(self._model.sid == obj.sid).values(changes)
         )
         await self._commit_or_flush(obj, with_commit)
         return obj

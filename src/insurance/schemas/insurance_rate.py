@@ -1,4 +1,5 @@
 from datetime import date
+from typing import Optional
 from uuid import UUID
 
 from common.schema import AbstractSchema
@@ -16,3 +17,9 @@ class InsuranceRateSchema(InsuranceRateBaseSchema):
 
 class InsuranceRateCreateSchema(InsuranceRateBaseSchema):
     pass
+
+
+class InsuranceRateUpdateSchema(AbstractSchema):
+    cargo_type: Optional[str]
+    rate: Optional[float]
+    transportation_date: Optional[date]
