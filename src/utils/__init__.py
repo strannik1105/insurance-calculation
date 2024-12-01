@@ -1,3 +1,3 @@
-from .utils import Singleton
+from .utils import Singleton, UrlMaker
 
-__all__ = ["Singleton"]
+__all__ = ["Singleton", "UrlMaker"]

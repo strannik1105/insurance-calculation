@@ -3,7 +3,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
-from common.config import Config
+from common.config import AppConfig
+from common.router.router import BaseRouter
 from utils import Singleton
 
 
@@ -17,7 +18,7 @@ class AbstractApp(Protocol):
 
 class App(Singleton[AbstractApp]):
     def __init__(self):
-        config = Config().get_instance()
+        config = AppConfig().get_instance()
 
         self._app = FastAPI()
         self._host = config.HOST
@@ -33,5 +34,5 @@ class App(Singleton[AbstractApp]):
         )
         uvicorn.run(self._app, host=self._host, port=self._port)
 
-    def add_route(self, path: str, route_handler: Callable[..., Any]) -> None:
-        self._app.add_api_route(path, route_handler)
+    def include_router(self, router: BaseRouter) -> None:
+        self._app.include_router(router.router)
