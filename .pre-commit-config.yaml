@@ -16,3 +16,4 @@ repos:
     hooks:
       - id: mypy
         language_version: python3.10
+        args: ["--exclude", "migrations", "--ignore-missing-imports", "--explicit-package-bases"]

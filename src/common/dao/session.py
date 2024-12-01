@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 
-from common.config.config import PostgresConfig
+from common.config import PostgresConfig
 from utils.utils import Singleton, UrlMaker
 
 

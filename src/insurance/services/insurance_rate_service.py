@@ -12,6 +12,5 @@ class InsuranceRateService:
     async def create_insurance(
         self, rate: InsuranceRateCreateSchema
     ) -> InsuranceRateSchema:
-        return InsuranceRateSchema(
-            (await self._repository.create(rate.model_dump())).__dict__
-        )
+        obj = await self._repository.create(rate.model_dump())
+        return InsuranceRateSchema.model_validate(obj)

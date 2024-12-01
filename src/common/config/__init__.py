@@ -1,3 +1,3 @@
-from .config import AppConfig
+from .config import AppConfig, PostgresConfig
 
-__all__ = ["AppConfig"]
+__all__ = ["AppConfig", "PostgresConfig"]

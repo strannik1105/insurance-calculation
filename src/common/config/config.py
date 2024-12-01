@@ -17,4 +17,4 @@ class PostgresConfig(AbstractConfig, Singleton[AbstractConfig]):
     POSTGRES_PASSWORD: str = "password"
     POSTGRES_DB: str = "insurance"
     POSTGRES_HOST: str = "0.0.0.0"
-    POSTGRES_PORT: int = 5432
+    POSTGRES_PORT: int = 25432
