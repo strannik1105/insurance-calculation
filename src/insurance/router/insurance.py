@@ -5,7 +5,7 @@ from fastapi_events.dispatcher import dispatch
 
 from common.router.router import BaseRouter, HttpMethod
 from common.schema import Msg
-from common.events import EventType, UserActionSchema
+from common.events import ActionType, EventType, EntityType, UserActionSchema
 from insurance.schemas.insurance_rate import (
     InsuranceRateSchema,
     InsuranceRateCreateSchema,
@@ -42,13 +42,21 @@ class InsuranceRouter(BaseRouter):
     ) -> list[InsuranceRateSchema]:
         dispatch(
             event_name=EventType.USER_ACTION,
-            payload=UserActionSchema(name="name", action="action"),
+            payload=UserActionSchema(
+                action=ActionType.GET, entity=EntityType.INSURANCE_RATE
+            ),
         )
         return await service.get_all(limit, offset)
 
     async def get_insurance(
         self, service: deps.InsuranceRateServiceDep, sid: UUID
     ) -> InsuranceRateSchema:
+        dispatch(
+            event_name=EventType.USER_ACTION,
+            payload=UserActionSchema(
+                action=ActionType.GET, entity=EntityType.INSURANCE_RATE
+            ),
+        )
         return await service.get_one(sid)
 
     async def update_insurance(
@@ -57,21 +65,45 @@ class InsuranceRouter(BaseRouter):
         sid: UUID,
         changes: InsuranceRateUpdateSchema,
     ) -> InsuranceRateSchema:
+        dispatch(
+            event_name=EventType.USER_ACTION,
+            payload=UserActionSchema(
+                action=ActionType.UPDATE, entity=EntityType.INSURANCE_RATE
+            ),
+        )
         return await service.update(sid, changes)
 
     async def create_insurance(
         self, service: deps.InsuranceRateServiceDep, rate: InsuranceRateCreateSchema
     ) -> InsuranceRateSchema:
+        dispatch(
+            event_name=EventType.USER_ACTION,
+            payload=UserActionSchema(
+                action=ActionType.CREATE, entity=EntityType.INSURANCE_RATE
+            ),
+        )
         return await service.create(rate)
 
     async def remove_insurance(
         self, service: deps.InsuranceRateServiceDep, sid: UUID
     ) -> Msg:
+        dispatch(
+            event_name=EventType.USER_ACTION,
+            payload=UserActionSchema(
+                action=ActionType.DELETE, entity=EntityType.INSURANCE_RATE
+            ),
+        )
         await service.remove(sid)
         return Msg(msg="Ok")
 
     async def import_insurances(
         self, service: deps.InsuranceRateServiceDep, rates: ImportRatesSchema
     ) -> Msg:
+        dispatch(
+            event_name=EventType.USER_ACTION,
+            payload=UserActionSchema(
+                action=ActionType.CREATE, entity=EntityType.INSURANCE_RATE
+            ),
+        )
         await service.import_rates(rates)
         return Msg(msg="Ok")

@@ -1,10 +1,10 @@
 from pydantic import BaseModel
 from fastapi_events.registry.payload_schema import registry
 
-from common.events.types import EventType
+from common.events.types import ActionType, EventType, EntityType
 
 
 @registry.register(event_name=EventType.USER_ACTION)
 class UserActionSchema(BaseModel):
-    name: str
-    action: str
+    action: ActionType
+    entity: EntityType
