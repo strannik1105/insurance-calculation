@@ -2,6 +2,9 @@ from datetime import date
 from typing import Optional
 from uuid import UUID
 
+from fastapi import Query
+from pydantic import Field
+
 from common.schema import AbstractSchema
 
 
@@ -23,6 +26,12 @@ class InsuranceRateUpdateSchema(AbstractSchema):
     cargo_type: Optional[str]
     rate: Optional[float]
     transportation_date: Optional[date]
+
+
+class InsuranceRateFilterSchema(AbstractSchema):
+    cargo_type: Optional[str] = Field(Query(None))
+    transportation_date_gt: Optional[date] = Field(Query(None))
+    transportation_date_lt: Optional[date] = Field(Query(None))
 
 
 class InsuranceRateImportSchema(AbstractSchema):

@@ -7,6 +7,7 @@ from insurance.schemas.insurance_rate import (
     ImportRatesSchema,
     InsuranceRateSchema,
     InsuranceRateCreateSchema,
+    InsuranceRateFilterSchema,
     InsuranceRateUpdateSchema,
 )
 from utils import NotFoundException
@@ -16,8 +17,12 @@ class InsuranceRateService:
     def __init__(self, session: PgSession) -> None:
         self._repository = CrudRepository[InsuranceRate](session, InsuranceRate)
 
-    async def get_all(self, limit: int, offset: int) -> list[InsuranceRateSchema]:
-        objs = await self._repository.get_all(limit, offset)
+    async def get_all(
+        self, filters: InsuranceRateFilterSchema, limit: int, offset: int
+    ) -> list[InsuranceRateSchema]:
+        objs = await self._repository.get_all(
+            filters.model_dump(exclude_none=True), limit, offset
+        )
         return [InsuranceRateSchema.model_validate(obj) for obj in objs]
 
     async def get_one(self, sid: UUID) -> InsuranceRateSchema:

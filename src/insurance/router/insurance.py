@@ -1,6 +1,7 @@
 from uuid import UUID
 
 
+from fastapi import Depends
 from fastapi_events.dispatcher import dispatch
 
 from common.router.router import BaseRouter, HttpMethod
@@ -9,6 +10,7 @@ from common.events import ActionType, EventType, EntityType, UserActionSchema
 from insurance.schemas.insurance_rate import (
     InsuranceRateSchema,
     InsuranceRateCreateSchema,
+    InsuranceRateFilterSchema,
     InsuranceRateUpdateSchema,
     ImportRatesSchema,
 )
@@ -38,15 +40,19 @@ class InsuranceRouter(BaseRouter):
         )
 
     async def get_insurances(
-        self, service: deps.InsuranceRateServiceDep, limit: int = 50, offset=0
+        self,
+        service: deps.InsuranceRateServiceDep,
+        filters: InsuranceRateFilterSchema = Depends(),
+        limit: int = 50,
+        offset=0,
     ) -> list[InsuranceRateSchema]:
-        dispatch(
-            event_name=EventType.USER_ACTION,
-            payload=UserActionSchema(
-                action=ActionType.GET, entity=EntityType.INSURANCE_RATE
-            ),
-        )
-        return await service.get_all(limit, offset)
+        # dispatch(
+        #     event_name=EventType.USER_ACTION,
+        #     payload=UserActionSchema(
+        #         action=ActionType.GET, entity=EntityType.INSURANCE_RATE
+        #     ),
+        # )
+        return await service.get_all(filters, limit, offset)
 
     async def get_insurance(
         self, service: deps.InsuranceRateServiceDep, sid: UUID

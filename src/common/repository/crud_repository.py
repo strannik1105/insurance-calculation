@@ -1,7 +1,8 @@
 from typing import Generic, Optional, Type, TypeVar, Any
+from uuid import UUID
+
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
-from uuid import UUID
 
 from common.model import AbstractModel
 
@@ -13,10 +14,21 @@ class CrudRepository(Generic[T]):
         self._session = session
         self._model = model
 
-    async def get_all(self, limit: int = 100, offset: int = 0) -> list[T]:
-        objs = await self._session.execute(
-            select(self._model).limit(limit).offset(offset)
-        )
+    async def get_all(
+        self, filters: dict[str, Any], limit: int = 100, offset: int = 0
+    ) -> list[T]:
+        print(filters.items())
+        stmt = select(self._model)
+
+        for key, value in filters.items():
+            if key.endswith("_gt"):
+                stmt = stmt.filter(self._model.__dict__[key[:-3]] > value)
+            elif key.endswith("__lt"):
+                stmt = stmt.filter(self._model.__dict__[key[:-3]] < value)
+            else:
+                stmt = stmt.filter(self._model.__dict__[key] == value)
+
+        objs = await self._session.execute(stmt.limit(limit).offset(offset))
         return list(objs.scalars().all())
 
     async def get(self, sid: UUID) -> T | None:
