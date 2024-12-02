@@ -1,6 +1,11 @@
 from uuid import UUID
+
+
+from fastapi_events.dispatcher import dispatch
+
 from common.router.router import BaseRouter, HttpMethod
 from common.schema import Msg
+from common.events import EventType, UserActionSchema
 from insurance.schemas.insurance_rate import (
     InsuranceRateSchema,
     InsuranceRateCreateSchema,
@@ -35,6 +40,10 @@ class InsuranceRouter(BaseRouter):
     async def get_insurances(
         self, service: deps.InsuranceRateServiceDep, limit: int = 50, offset=0
     ) -> list[InsuranceRateSchema]:
+        dispatch(
+            event_name=EventType.USER_ACTION,
+            payload=UserActionSchema(name="name", action="action"),
+        )
         return await service.get_all(limit, offset)
 
     async def get_insurance(

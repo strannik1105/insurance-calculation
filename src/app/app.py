@@ -1,9 +1,12 @@
 from typing import Any, Callable, Protocol
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi_events.middleware import EventHandlerASGIMiddleware
+from fastapi_events.handlers.local import local_handler
 import uvicorn
 
 from common.config import AppConfig
+from common.events import handle_user_action  # noqa
 from common.router import BaseRouter
 from utils import Singleton
 
@@ -32,6 +35,7 @@ class App(Singleton[AbstractApp]):
             allow_methods=["*"],
             allow_headers=["*"],
         )
+        self._app.add_middleware(EventHandlerASGIMiddleware, handlers=[local_handler])
         uvicorn.run(self._app, host=self._host, port=self._port)
 
     def include_router(self, router: BaseRouter) -> None:
