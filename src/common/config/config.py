@@ -18,3 +18,8 @@ class PostgresConfig(AbstractConfig, Singleton[AbstractConfig]):
     POSTGRES_DB: str = "insurance"
     POSTGRES_HOST: str = "postgres"
     POSTGRES_PORT: int = 5432
+
+
+class KafkaConfig(AbstractConfig, Singleton[AbstractConfig]):
+    KAFKA_HOST: str = "kafka"
+    KAFKA_PORT: int = 9092

@@ -12,3 +12,11 @@ services:
     env_file: .env.local
     ports:
       - "5432:5432"
+
+  kafka:
+    container_name: kafka
+    image: apache/kafka:3.9.0
+    restart: always
+    env_file: .env.local
+    ports:
+      - "9092:9092"

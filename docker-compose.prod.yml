@@ -18,6 +18,17 @@ services:
     ports:
       - "5432:5432"
 
+  kafka:
+    container_name: kafka
+    hostname: kafka
+    image: apache/kafka:3.9.0
+    restart: always
+    env_file: .env.local
+    networks:
+      - net
+    ports:
+      - "9092:9092"
+
   insurance-calculation-backend:
     container_name: insurance_calculation_backend
     build:
@@ -31,4 +42,6 @@ services:
       - "8000:8000"
     depends_on:
       postgres:
+        condition: service_started
+      kafka:
         condition: service_started
